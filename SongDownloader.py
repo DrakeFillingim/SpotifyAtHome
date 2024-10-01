@@ -1,11 +1,11 @@
 import os
 import ffmpeg
 import yt_dlp
+from SongBase import SongBase
 
 #file name convention
 
 class SongDownloader:
-    mp3Folder = "AudioFiles/"
     defaultOptions = {
         "quiet" : True,
         "getthumbnail" : True,
@@ -16,7 +16,7 @@ class SongDownloader:
         with yt_dlp.YoutubeDL(downloadOptions) as ytdl:
             info = ytdl.extract_info(songURL)
             fileName = info["title"] + " [" + info["id"] + "]." + info["ext"]
-            targetName = SongDownloader.mp3Folder + songArtist + " - " + songName + ".mp3"
+            targetName = SongBase.mp3Folder + songArtist + " - " + songName + ".mp3"
             SongDownloader.ExtractAudio(fileName, targetName)
 
             #save thumbnail?

@@ -1,10 +1,10 @@
 import pygame
+from SongBase import SongBase
 pygame.init()
 pygame.mixer.init()
 
 class SongPlayer:
     sound = None
-    mp3Folder = "AudioFiles/"
 
     def PlaySong(songName, songArtist):
         sound = pygame.mixer.Sound(SongPlayer.GetFile(songName, songArtist))
@@ -13,4 +13,4 @@ class SongPlayer:
             pass
 
     def GetFile(songName, songArtist):
-        return SongPlayer.mp3Folder + songArtist + " - " + songName + ".mp3"
+        return SongBase.mp3Folder + songArtist + " - " + songName + ".mp3"
