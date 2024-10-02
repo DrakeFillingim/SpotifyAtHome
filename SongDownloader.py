@@ -9,14 +9,18 @@ class SongDownloader:
     defaultOptions = {
         "quiet" : True,
         "getthumbnail" : True,
-        "noprogress" : True
+        "noprogress" : True,
         }
 
     def DownloadSong(songURL, songName, songArtist, downloadOptions):
+        targetName = SongBase.mp3Folder + songArtist + " - " + songName + ".mp3"
+        if os.path.isfile(targetName):
+            print("here")
+            return
+        
         with yt_dlp.YoutubeDL(downloadOptions) as ytdl:
             info = ytdl.extract_info(songURL)
             fileName = info["title"] + " [" + info["id"] + "]." + info["ext"]
-            targetName = SongBase.mp3Folder + songArtist + " - " + songName + ".mp3"
             SongDownloader.ExtractAudio(fileName, targetName)
 
             #save thumbnail?
@@ -25,5 +29,6 @@ class SongDownloader:
             #img.save("test.png")
 
     def ExtractAudio(input_file, output_mp3):
+        outp = ffmpeg.input(input_file).output(output_mp3)
         ffmpeg.input(input_file).output(output_mp3).run()
         os.remove(input_file)
