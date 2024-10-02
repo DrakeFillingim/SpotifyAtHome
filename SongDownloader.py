@@ -1,6 +1,7 @@
 import os
 import ffmpeg
 import yt_dlp
+import json
 from SongBase import SongBase
 
 #file name convention
@@ -16,7 +17,6 @@ class SongDownloader:
     def DownloadSong(songURL, songName, songArtist, downloadOptions = None):
         targetName = SongBase.mp3Folder + songArtist + " - " + songName + ".mp3"
         if os.path.isfile(targetName):
-            print("here")
             return
 
         if downloadOptions is None:

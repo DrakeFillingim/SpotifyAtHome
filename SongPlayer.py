@@ -3,13 +3,14 @@ import os
 from SongBase import SongBase
 from SongDownloader import SongDownloader
 from threading import Thread
+import json
 pygame.init()
 pygame.mixer.init()
 
 class SongPlayer:
     def __init__(self):
-        self.volume = .4
-        self.allSongs = os.listdir(SongBase.mp3Folder)
+        self.volume = 0
+        self.allSongs = [x for x in os.listdir(SongBase.mp3Folder) if x[-3:] == "mp3"]
         self.currentSong = 12
         self.maxSongs = len(self.allSongs)
 
@@ -36,6 +37,7 @@ class SongPlayer:
     def HandleInput(self, enteredString):
         match enteredString.lower():
             case "exit":
+                
                 quit()
             case "skip":
                 self.currentSong += 1
@@ -54,6 +56,7 @@ class SongPlayer:
                 name = input("Song Name: ")
                 artist = input("Song Artist: ")
                 self.PlaySongByName(name, artist)
+                self.currentSong = self.allSongs.index(SongPlayer.GetFile(name, artist))
             case "goto":
                 i = int(input("Song Number: "))
                 if i < 0:
@@ -74,6 +77,7 @@ class SongPlayer:
                 DownloadThread.start()
             case "playing":
                 print(self.allSongs[self.currentSong][:-4])
+                print(pygame.mixer.music.get_pos(), "/")
 
     def DownloadSong(self, url, name, artist):
         SongDownloader.DownloadSong(url, name, artist)
@@ -89,6 +93,13 @@ class SongPlayer:
 
     def GetFile(songName, songArtist):
         return  songArtist + " - " + songName + ".mp3"
+
+    def UpdateData(self):
+        userData = {
+                    "volume" : self.volume,
+                    "currentSong" : self.currentSong,
+                    "currentPos" : pygame.mixer.music.get_pos()
+                    }
 
 player = SongPlayer()
 player.Run()
